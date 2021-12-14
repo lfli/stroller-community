@@ -1,0 +1,12 @@
+{
+    "links": {
+        "home": "Home",
+        "find": "Find",
+        "privateLetter": "Private letter",
+        "my": "My"
+    },
+    "language": {
+        "en": "English",
+        "zh": "中文"
+    }
+}

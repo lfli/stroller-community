@@ -1,0 +1,12 @@
+{
+    "links": {
+        "home": "首页",
+        "find": "发现",
+        "privateLetter": "私信",
+        "my": "个人中心"
+    },
+    "language": {
+        "en": "English",
+        "zh": "中文"
+    }
+}
