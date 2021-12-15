@@ -3,7 +3,7 @@ export default {
   head: {
     title: '童车社群',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'zh'
     },
     meta: [
       { charset: 'utf-8' },
@@ -56,8 +56,9 @@ export default {
 
   proxy: {
     '/api': {
-      target: 'http://tms.yingyanxt.com',
+      target: 'http://47.99.122.43:3000',
       pathRewrite: {
+        '/api': ''
       }
     }
   },

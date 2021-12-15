@@ -81,7 +81,7 @@ export default class Default extends Vue {
 .default {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
 
   .content {
     flex: 1;
@@ -89,10 +89,11 @@ export default class Default extends Vue {
 
   .tabs-menu {
     background: url(@/assets/image/Rectangle.png) no-repeat;
-    background-size: 100% 15.89vh;
+    background-size: 100% 10vh;
     width: 100%;
-    height: 15.89vh;
+    height: 10vh;
     display: flex;
+    justify-content: center;
     flex-direction: column;
     position: absolute;
     bottom: 0;
@@ -102,11 +103,13 @@ export default class Default extends Vue {
       width: 58px;
       height: 58px;
       border-radius: 50%;
-      transform: translateY(-30%);
+      transform: translate(-50%, -68%);
       margin: 0 auto;
       display: flex;
       justify-content: center;
       align-items: center;
+      position: absolute;
+      left: 50%;
 
       img {
         width: 24px;
