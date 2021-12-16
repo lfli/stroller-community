@@ -14,8 +14,7 @@
     "element-ui": "^2.15.2",
     "nuxt": "^2.15.7",
     "vue-class-component": "^7.2.6",
-    "vue-i18n": "^8.26.7",
-    "vue-video-player": "^5.0.2"
+    "vue-i18n": "^8.26.7"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.7",
