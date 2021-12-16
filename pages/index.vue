@@ -28,19 +28,37 @@
       <div
         ref="previousVideo"
         :class="['previous-video', isRestoreLocation ? 'restore-location' : '']"
-      ></div>
+      >
+        <video v-if="threeVideo[0]" loop muted>
+          <source :src="threeVideo[0]" type="video/mp4" />
+        </video>
+      </div>
       <div
         ref="currentVideo"
         :class="['current-video', isRestoreLocation ? 'restore-location' : '']"
         @touchstart="touchstart"
         @touchend="touchend"
         @touchmove="touchmove"
-      ></div>
+      >
+        <video v-if="threeVideo[1]" loop muted>
+          <source :src="threeVideo[1]" type="video/mp4" />
+        </video>
+      </div>
       <div
         ref="nextVideo"
         :class="['next-video', isRestoreLocation ? 'restore-location' : '']"
-      ></div>
+      >
+        <video v-if="threeVideo[2]" loop muted>
+          <source :src="threeVideo[2]" type="video/mp4" />
+        </video>
+      </div>
     </div>
+    <iframe
+      ref="iframeDom"
+      allow="autoplay"
+      style="display: none"
+      :src="require('@/assets/null.m4a')"
+    ></iframe>
   </div>
 </template>
 
@@ -59,11 +77,9 @@ import { getMvUrlRequest } from "~/apis/requests/api";
 export default class Home extends Vue {
   langs = ["en", "zh"];
 
-  imageList = [
-    "https://pic1.zhimg.com/80/v2-90fd4da7000c0919bc78fe56e8f4ea80_720w.jpg?source=1940ef5c",
-    "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic_source%2F2e%2Ffe%2Fa4%2F2efea460e5834f2596290cea1f8e6dd8.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642129603&t=2d0575189cb94b172f11124350658ff5",
-    "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F482d3ff44920c61edb3c8a7b390d3c1268f40f5619614-yV59l1_fw658&refer=http%3A%2F%2Fhbimg.b0.upaiyun.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642129406&t=9c916b6a94fa516aa0df27ac27e4668a",
-  ];
+  threeVideo: string[] = [];
+
+  imageList: string[] = [];
 
   isRestoreLocation = false;
 
@@ -86,21 +102,30 @@ export default class Home extends Vue {
       result.map((item) => item.data.url)
     );
 
-    this.loadVideo(this.imageList[1]).then((video) => {
-      (this.$refs.currentVideo as HTMLElement).appendChild(video);
-    });
+    this.threeVideo = this.imageList;
 
-    this.loadVideo(this.imageList[0]).then((video) => {
-      (this.$refs.previousVideo as HTMLElement).appendChild(video);
-    });
+    this.$nextTick(() => {
+      this.loadVideo(
+        this.threeVideo[0],
+        (this.$refs.previousVideo as HTMLElement).childNodes[0] as HTMLElement
+      );
+      this.loadVideo(
+        this.threeVideo[1],
+        (this.$refs.currentVideo as HTMLElement).childNodes[0] as HTMLElement
+      );
+      this.loadVideo(
+        this.threeVideo[2],
+        (this.$refs.nextVideo as HTMLElement).childNodes[0] as HTMLElement
+      );
 
-    this.loadVideo(this.imageList[2]).then((video) => {
-      (this.$refs.nextVideo as HTMLElement).appendChild(video);
+      const c = (this.$refs.currentVideo as HTMLElement)
+        .childNodes[0] as HTMLVideoElement;
+      c.play();
     });
   }
 
-  loadVideo(src: string) {
-    return new Promise<HTMLVideoElement>((resolve, reject) => {
+  loadVideo(src: string, el: HTMLElement) {
+    return new Promise<void>((resolve, reject) => {
       const video = document.createElement("video");
       video.src = src;
       video.addEventListener("loadedmetadata", function (e) {
@@ -110,14 +135,14 @@ export default class Home extends Vue {
         const videoScale = video.videoWidth / video.videoHeight;
         if (videoScale >= clientScale) {
           // 视频过宽
-          video.style.width = "100%";
-          video.style.height = "unset";
+          el.style.width = "100%";
+          el.style.height = "unset";
         } else {
           // 视频过高
-          video.style.height = "100%";
-          video.style.width = "unset";
+          el.style.height = "100%";
+          el.style.width = "unset";
         }
-        resolve(video);
+        resolve();
       });
     });
   }
@@ -248,8 +273,17 @@ export default class Home extends Vue {
       );
     }
 
-    ((this.$refs.currentVideo as HTMLElement).childNodes[0] as any).autoplay =
-      true;
+    const p = (this.$refs.previousVideo as HTMLElement)
+      .childNodes[0] as HTMLVideoElement;
+    p.pause();
+
+    const n = (this.$refs.nextVideo as HTMLElement)
+      .childNodes[0] as HTMLVideoElement;
+    n.pause();
+
+    const c = (this.$refs.currentVideo as HTMLElement)
+      .childNodes[0] as HTMLVideoElement;
+    c.play();
   }
 }
 </script>
