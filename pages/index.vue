@@ -53,12 +53,6 @@
         </video>
       </div>
     </div>
-    <iframe
-      ref="iframeDom"
-      allow="autoplay"
-      style="display: none"
-      :src="require('@/assets/null.m4a')"
-    ></iframe>
   </div>
 </template>
 
