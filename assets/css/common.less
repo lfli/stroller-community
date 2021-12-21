@@ -1,5 +1,87 @@
 /* 全局样式 */
 
+// 页面大标题
+.Title{
+    font-size: 28px;
+    font-weight: 600;
+    padding: 0 16px 10px;
+    margin-top: 10px;
+}
+
+.top30{
+    margin-top: 30px !important;
+}
+
+// 页面16pt距离
+.safe-box{
+    padding: 0 16px;
+}
+
+// 箭头
+.arrow {
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    width: 9px;
+    height: 9px;
+}
+
+.arrow-white {
+    border-color: #fff;
+}
+
+.arrow-grey {
+    border-color: #cccccc;
+}
+
+// 页面通用顶部灰色返回按钮
+.go-back {
+    position: relative;
+    display: block;
+    width: 48px;
+    height: 48px;
+    text-decoration: none;
+}
+
+.go-back:after,
+.go-back:before {
+    content: "";
+    display: block;
+    position: absolute;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+.go-back:before {
+    top: 50%;
+    left: 16px;
+    width: 18px;
+    height: 18px;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-transform: translate(0, -0.5em) rotate(45deg);
+    transform: translate(0, -0.5em) rotate(45deg);
+    box-shadow: inset 3px -3px 0 0 #DADADA;
+    border-radius: 0 0.15em 0 0;
+}
+.go-back:after {
+    top: 50%;
+    left: 16px;
+    width: 30px;
+    height: 3px;
+    -webkit-transform: translate(0, 0);
+    transform: translate(-2px, 0);
+    background-color: #DADADA;
+}
+// .go-back:hover:before {
+//     -webkit-transform: translate(0.5em, -0.5em) rotate(45deg);
+//     transform: translate(0.5em, -0.5em) rotate(45deg);
+// }
+// .go-back:hover:after {
+//     -webkit-transform: translate(0.5em, -0.1em);
+//     transform: translate(0.5em, -0.1em);
+// }
 
 
 /* css 初始化 */

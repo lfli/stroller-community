@@ -3,7 +3,16 @@
         "home": "Home",
         "find": "Find",
         "privateLetter": "Private letter",
-        "my": "My"
+        "my": "My",
+        "fans": "Fans",
+
+        "concerned": "Concerned about you", 
+        "praised": "Praised your work",
+        "interactive": "Interactive message",
+        "follow": "follow",
+        "followed" :"concerned",
+
+        "allMessages" : "All Messages"
     },
     "language": {
         "en": "English",

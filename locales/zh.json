@@ -3,7 +3,16 @@
         "home": "首页",
         "find": "发现",
         "privateLetter": "私信",
-        "my": "个人中心"
+        "my": "个人中心",
+        "fans": "粉丝",
+
+        "concerned": "关注了你",
+        "praised": "赞了你的作品",
+        "interactive": "互动消息",
+        "follow": "关注",
+        "followed": "已关注",
+
+        "allMessages" :"全部消息"
     },
     "language": {
         "en": "English",
