@@ -5,6 +5,7 @@
         {{ $t(`language.${lang}`) }}
       </option>
     </select> -->
+
     <div class="handle">
       <img
         @click="jump('search')"
@@ -14,11 +15,12 @@
       />
       <div class="handle-right">
         <UserHeaderFollow />
-        <Good />
+        <Good :title="'立刻决定是否了'" />
         <Share />
       </div>
 
-      <div class="info">
+      <div ref="vvv" class="info">
+        <button @click="play()">开启声音</button>
         <div class="title">滑板进阶技巧</div>
         <div class="author">@Emilie Palmer</div>
       </div>
@@ -28,11 +30,7 @@
       <div
         ref="previousVideo"
         :class="['previous-video', isRestoreLocation ? 'restore-location' : '']"
-      >
-        <video v-if="threeVideo[0]" loop muted>
-          <source :src="threeVideo[0]" type="video/mp4" />
-        </video>
-      </div>
+      ></div>
       <div
         ref="currentVideo"
         :class="['current-video', isRestoreLocation ? 'restore-location' : '']"
@@ -40,18 +38,23 @@
         @touchend="touchend"
         @touchmove="touchmove"
       >
-        <video v-if="threeVideo[1]" loop muted>
-          <source :src="threeVideo[1]" type="video/mp4" />
+        <video
+          class="playing-video"
+          :style="{ 'z-index': 1 }"
+          autoplay
+          loop
+          muted
+          playsinline
+          ref="playingVideo"
+        >
+          <source type="video/mp4" />
+          您的浏览器不支持音视频元素。
         </video>
       </div>
       <div
         ref="nextVideo"
         :class="['next-video', isRestoreLocation ? 'restore-location' : '']"
-      >
-        <video v-if="threeVideo[2]" loop muted>
-          <source :src="threeVideo[2]" type="video/mp4" />
-        </video>
-      </div>
+      ></div>
     </div>
   </div>
 </template>
@@ -69,11 +72,21 @@ import { getMvUrlRequest } from "~/apis/requests/api";
   },
 })
 export default class Home extends Vue {
+  $videojs!: any;
+  $refs!: {
+    previousVideo: HTMLElement;
+    currentVideo: HTMLElement;
+    nextVideo: HTMLElement;
+    playingVideo: HTMLVideoElement;
+  };
+
   langs = ["en", "zh"];
 
-  threeVideo: string[] = [];
+  threeVideo: string[] = []; // 正在播放以及前后的 3 个视频地址
 
-  imageList: string[] = [];
+  videoList: string[] = []; // 视频地址列表
+
+  playingVideoIndex!: number; // 当前播放视频指针
 
   isRestoreLocation = false;
 
@@ -81,62 +94,105 @@ export default class Home extends Vue {
     return { title: "你你你你将来肯定就发给" };
   }
 
-  async mounted() {
-    if (process.server) {
-      return;
-    }
+  play() {
+    this.$refs.playingVideo.muted = false;
+  }
 
+  async mounted() {
     await this.$store.dispatch("video/getMvList");
 
-    const mvUrlPromiseList = (this.$store.state.video.videoList as [])
-      .slice(0, 3)
-      .map((item: any) => getMvUrlRequest(item.id));
-
-    this.imageList = await Promise.all(mvUrlPromiseList).then((result) =>
+    const mvUrlPromiseList = (this.$store.state.video.videoList as []).map(
+      (item: any) => getMvUrlRequest(item.id)
+    );
+    this.videoList = await Promise.all(mvUrlPromiseList).then((result) =>
       result.map((item) => item.data.url)
     );
 
-    this.threeVideo = this.imageList;
-
-    this.$nextTick(() => {
-      this.loadVideo(
-        this.threeVideo[0],
-        (this.$refs.previousVideo as HTMLElement).childNodes[0] as HTMLElement
-      );
-      this.loadVideo(
-        this.threeVideo[1],
-        (this.$refs.currentVideo as HTMLElement).childNodes[0] as HTMLElement
-      );
-      this.loadVideo(
-        this.threeVideo[2],
-        (this.$refs.nextVideo as HTMLElement).childNodes[0] as HTMLElement
-      );
-
-      const c = (this.$refs.currentVideo as HTMLElement)
-        .childNodes[0] as HTMLVideoElement;
-      c.play();
-    });
+    this.playingVideoIndex = 20;
+    this.rendererVideoBox();
   }
 
-  loadVideo(src: string, el: HTMLElement) {
-    return new Promise<void>((resolve, reject) => {
+  async rendererVideoBox() {
+    this.threeVideo = this.videoList.slice(
+      this.playingVideoIndex - 1,
+      this.playingVideoIndex + 2
+    );
+
+    await this.loadVideoCover(this.threeVideo[1]).then((img) => {
+      const child = this.$refs.currentVideo.childNodes[1];
+      if (child) {
+        this.$refs.currentVideo.removeChild(child);
+      }
+      this.$refs.currentVideo.appendChild(img);
+
+      this.$refs.playingVideo.src = this.threeVideo[1];
+      this.$refs.playingVideo.load();
+
+      // 当前要播放的视频加载完成时，将 currentVideo 移动到原本位置（屏幕中间），防止闪屏
+      this.$refs.currentVideo.style.transform = "";
+    });
+
+    await Promise.all([
+      this.loadVideoCover(this.threeVideo[0]).then((img) => {
+        const child = this.$refs.previousVideo.childNodes[0];
+        if (child) {
+          this.$refs.previousVideo.removeChild(child);
+        }
+        this.$refs.previousVideo.appendChild(img);
+      }),
+      this.loadVideoCover(this.threeVideo[2]).then((img) => {
+        const child = this.$refs.nextVideo.childNodes[0];
+        if (child) {
+          this.$refs.nextVideo.removeChild(child);
+        }
+        this.$refs.nextVideo.appendChild(img);
+      }),
+    ]);
+  }
+
+  /**
+   * 加装视频封面（第一帧）
+   */
+  loadVideoCover(src: string) {
+    return new Promise<HTMLImageElement>((resolve, reject) => {
       const video = document.createElement("video");
       video.src = src;
-      video.addEventListener("loadedmetadata", function (e) {
+      video.setAttribute("crossorigin", "anonymous");
+      video.autoplay = true;
+      video.addEventListener("loadeddata", (e) => {
         const clientWidth = document.documentElement.clientWidth;
         const clientHeight = document.documentElement.clientHeight;
         const clientScale = clientWidth / clientHeight;
         const videoScale = video.videoWidth / video.videoHeight;
+
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas
+          .getContext("2d")
+          ?.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const img = document.createElement("img");
+        img.src = canvas.toDataURL("image/png");
+
         if (videoScale >= clientScale) {
           // 视频过宽
-          el.style.width = "100%";
-          el.style.height = "unset";
+          img.style.width = "100%";
+          img.style.height = "unset";
+          this.$refs.playingVideo.style.width = "100%";
+          this.$refs.playingVideo.style.height = "unset";
         } else {
           // 视频过高
-          el.style.height = "100%";
-          el.style.width = "unset";
+          img.style.height = "100%";
+          img.style.width = "unset";
+          this.$refs.playingVideo.style.width = "100%";
+          this.$refs.playingVideo.style.height = "unset";
         }
-        resolve();
+
+        video.src = "";
+        video.load();
+
+        resolve(img);
       });
     });
   }
@@ -182,28 +238,25 @@ export default class Home extends Vue {
     const touchmoveY = event.clientY || event.changedTouches[0].clientY;
     const moveDistance = touchmoveY - this.touchstartY;
 
-    (this.$refs.previousVideo as HTMLElement).style.transform = `translateY(${
+    this.$refs.previousVideo.style.transform = `translateY(${
       moveDistance - document.documentElement.clientHeight
     }px)`;
-    (
-      this.$refs.currentVideo as HTMLElement
-    ).style.transform = `translateY(${moveDistance}px)`;
-    (this.$refs.nextVideo as HTMLElement).style.transform = `translateY(${
+    this.$refs.currentVideo.style.transform = `translateY(${moveDistance}px)`;
+    this.$refs.nextVideo.style.transform = `translateY(${
       moveDistance + document.documentElement.clientHeight
     }px)`;
   }
 
   clearStyle() {
-    (this.$refs.previousVideo as HTMLElement).style.transform = "";
-    (this.$refs.currentVideo as HTMLElement).style.transform = "";
-    (this.$refs.nextVideo as HTMLElement).style.transform = "";
+    this.$refs.previousVideo.style.transform = "";
+    this.$refs.currentVideo.style.transform = "";
+    this.$refs.nextVideo.style.transform = "";
   }
 
   playNextVideo() {
     this.isRestoreLocation = true;
-    (this.$refs.currentVideo as HTMLElement).style.transform =
-      "translateY(-100%)";
-    (this.$refs.nextVideo as HTMLElement).style.transform = "translateY(0)";
+    this.$refs.currentVideo.style.transform = "translateY(-100%)";
+    this.$refs.nextVideo.style.transform = "translateY(0)";
     setTimeout(() => {
       this.isRestoreLocation = false;
       this.resetVideoBox("next");
@@ -212,9 +265,8 @@ export default class Home extends Vue {
 
   playPreviousVideo() {
     this.isRestoreLocation = true;
-    (this.$refs.previousVideo as HTMLElement).style.transform = "translateY(0)";
-    (this.$refs.currentVideo as HTMLElement).style.transform =
-      "translateY(100%)";
+    this.$refs.previousVideo.style.transform = "translateY(0)";
+    this.$refs.currentVideo.style.transform = "translateY(100%)";
     setTimeout(() => {
       this.isRestoreLocation = false;
       this.resetVideoBox("previous");
@@ -222,62 +274,10 @@ export default class Home extends Vue {
   }
 
   resetVideoBox(who: "next" | "previous") {
-    this.clearStyle();
-
-    const currentVideo = (this.$refs.currentVideo as HTMLElement).childNodes[0];
-    const previousVideo = (this.$refs.previousVideo as HTMLElement)
-      .childNodes[0];
-    const previousVideoClone = (
-      this.$refs.previousVideo as HTMLElement
-    ).childNodes[0].cloneNode(true);
-    const nextVideo = (this.$refs.nextVideo as HTMLElement).childNodes[0];
-    const nextVideoClone = (
-      this.$refs.nextVideo as HTMLElement
-    ).childNodes[0].cloneNode(true);
-
-    if (who === "next") {
-      (this.$refs.currentVideo as HTMLElement).replaceChild(
-        nextVideoClone,
-        currentVideo
-      );
-
-      (this.$refs.previousVideo as HTMLElement).replaceChild(
-        currentVideo,
-        previousVideo
-      );
-
-      (this.$refs.nextVideo as HTMLElement).replaceChild(
-        previousVideo,
-        nextVideo
-      );
-    } else {
-      (this.$refs.currentVideo as HTMLElement).replaceChild(
-        previousVideoClone,
-        currentVideo
-      );
-
-      (this.$refs.previousVideo as HTMLElement).replaceChild(
-        nextVideoClone,
-        previousVideo
-      );
-
-      (this.$refs.nextVideo as HTMLElement).replaceChild(
-        currentVideo,
-        nextVideo
-      );
-    }
-
-    const p = (this.$refs.previousVideo as HTMLElement)
-      .childNodes[0] as HTMLVideoElement;
-    p.pause();
-
-    const n = (this.$refs.nextVideo as HTMLElement)
-      .childNodes[0] as HTMLVideoElement;
-    n.pause();
-
-    const c = (this.$refs.currentVideo as HTMLElement)
-      .childNodes[0] as HTMLVideoElement;
-    c.play();
+    this.playingVideoIndex += who === "next" ? 1 : -1;
+    this.rendererVideoBox().then(() => {
+      this.clearStyle();
+    });
   }
 }
 </script>
@@ -346,6 +346,9 @@ export default class Home extends Vue {
     }
 
     .current-video {
+      .playing-video {
+        position: absolute;
+      }
     }
 
     .next-video {

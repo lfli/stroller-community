@@ -12,7 +12,11 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://unpkg.com/video.js@7.10.2/dist/video-js.min.css' }
+    ],
+    script: [
+      { src: 'https://unpkg.com/video.js@7.10.2/dist/video.min.js' },
     ]
   },
 
@@ -27,6 +31,7 @@ export default {
     '@/plugins/element-ui',
     '@/plugins/i18n.js',
     { src: '@/plugins/rem.js', ssr: false },
+    { src: '@/plugins/video.js', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
