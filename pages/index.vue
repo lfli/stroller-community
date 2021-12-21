@@ -328,7 +328,7 @@ export default class Home extends Vue {
     }
   }
   .handle > * {
-    z-index: 1;
+    z-index: 2;
   }
 
   .video-box {
