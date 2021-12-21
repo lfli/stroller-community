@@ -11,7 +11,6 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-// import  Options  from "vue-class-component";
 
 @Component({
   props: {
@@ -29,10 +28,6 @@ import Component from "vue-class-component";
   },
 })
 export default class PrivateLetterList extends Vue {
-  //   jump(path: string) {
-  //   this.$router.push({ path });
-  // }
-
   srcUrl!: string;
   isShow!: boolean;
   clickBtn!: string;

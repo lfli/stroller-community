@@ -56,6 +56,7 @@ import Component from "vue-class-component";
 @Component({})
 export default class PrivateLetter extends Vue {
   fansImg = require("@/assets/image/list-icon.png");
+  
   goFans() {
     this.$router.push({ path: "fans" });
   }
