@@ -1,16 +1,10 @@
 <template>
-  <div>
-     <div class="sign-input">
-        <div class="sign-input-title">{{title}}</div>
-        <div class="sign-input-box">
-          <input
-            type="text"
-            class="sign-input-input"
-            :placeholder="placeholder"
-          />
-          <span class="input-delete"></span>
-        </div>
-      </div>
+  <div class="sign-input">
+    <div class="sign-input-title">{{ title }}</div>
+    <div class="sign-input-box">
+      <input type="text" class="sign-input-input" :placeholder="placeholder" />
+      <span class="input-delete"></span>
+    </div>
   </div>
 </template>
 
@@ -74,7 +68,7 @@ export default class SignInput extends Vue {}
       content: "";
       position: absolute;
       left: 50%;
-      top:50%;
+      top: 50%;
       margin-top: -5px;
       margin-left: -0.5px;
       width: 1px;
@@ -84,11 +78,11 @@ export default class SignInput extends Vue {}
       transform: rotate(45deg);
     }
 
-      .input-delete::before{
+    .input-delete::before {
       content: "";
       position: absolute;
       left: 50%;
-      top:50%;
+      top: 50%;
       margin-top: -5px;
       margin-left: -0.5px;
       width: 1px;
@@ -99,5 +93,4 @@ export default class SignInput extends Vue {}
     }
   }
 }
-
 </style>

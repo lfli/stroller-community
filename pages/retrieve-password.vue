@@ -1,7 +1,10 @@
 <template>
   <div class="page">
     <div class="go-back go-back-black"></div>
-    <div class="Title">Sign in</div>
+    <div class="Title">
+      Retrieve <br />
+      password
+    </div>
     <div class="content-box">
       <div class="sign-box content-img">
         <img
@@ -9,18 +12,15 @@
           alt=""
           class="sign-img"
         />
-        <SignInput
-          v-for="(item, index) in list"
-          :key="index"
-          :ploaceholder="item.placeholder"
-          :title="item.title"
-        />
-        <button class="btn-common sign-in">Sign in</button>
-        <button class="forget-password" @click="forgetPassword()">Forget the password?</button>
-      </div>
-      <div class="register">
-        <span>Don’t have an account?</span>
-        <div class="sign-up" @click="signUp()">Sign up</div>
+        <div class="send-inf">
+          <p class="">The password will be sent to the binding mailbox</p>
+          <p class="send-email">1501684493@qq.com</p>
+        </div>
+
+        <!-- <button class="btn-common sign-in">Confirm retrieval</button> -->
+
+        <button class="btn-common sign-in">Go login</button>
+        <button class="forget-password">Resend</button>
       </div>
     </div>
   </div>
@@ -33,26 +33,7 @@ import Component from "vue-class-component";
 @Component({
   layout: "notabs",
 })
-export default class SignIn extends Vue {
-  list = [
-    {
-      title: "Account number",
-      placeholder: "请输入您的账户",
-    },
-    {
-      title: "Password",
-      placeholder: "请输入您的密码",
-    },
-  ];
-
-    signUp() {
-    this.$router.push({ path: "sign-up" });
-  }
-
-  forgetPassword(){
-    this.$router.push({ path: "retrieve-password" });
-  }
-}
+export default class RetrievePassword extends Vue {}
 </script>
 
 <style lang="less" scoped>
@@ -110,6 +91,7 @@ export default class SignIn extends Vue {
 
   .sign-in {
     width: 100%;
+    margin-top: 50px;
   }
 
   .forget-password {
@@ -120,20 +102,15 @@ export default class SignIn extends Vue {
     height: 30px;
   }
 
-  .register {
-    background: #fff;
-    border-radius: 25px;
-    margin-top: -30px;
-    padding: 45px 20px 20px;
-    display: flex;
-    align-items: center;
-    font-size: 15px;
+  .send-inf {
+    font-size: 14px;
     color: #999;
-    justify-content: center;
+    margin-top: 60px;
 
-    .sign-up {
-      margin-left: 5px;
+    .send-email {
       color: #000;
+      font-weight: 600;
+      margin-top: 15px;
     }
   }
 }
