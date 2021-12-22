@@ -19,7 +19,7 @@
         <Share />
       </div>
 
-      <div ref="vvv" class="info">
+      <div class="info">
         <button @click="play()">开启声音</button>
         <div class="title">滑板进阶技巧</div>
         <div class="author">@Emilie Palmer</div>
@@ -79,6 +79,7 @@ export default class Home extends Vue {
     nextVideo: HTMLElement;
     playingVideo: HTMLVideoElement;
   };
+  isAndroid!: boolean;
 
   langs = ["en", "zh"];
 
@@ -99,6 +100,12 @@ export default class Home extends Vue {
   }
 
   async mounted() {
+    this.isAndroid =
+      navigator.userAgent
+        .toLowerCase()
+        .match(/android/i)
+        ?.toString() == "android";
+
     await this.$store.dispatch("video/getMvList");
 
     const mvUrlPromiseList = (this.$store.state.video.videoList as []).map(
@@ -121,6 +128,10 @@ export default class Home extends Vue {
     await this.loadVideoCover(this.threeVideo[1]).then((img) => {
       const child = this.$refs.currentVideo.childNodes[1];
       if (child) {
+        if (this.isAndroid) {
+          (child as HTMLVideoElement).src = "";
+          (child as HTMLVideoElement).load();
+        }
         this.$refs.currentVideo.removeChild(child);
       }
       this.$refs.currentVideo.appendChild(img);
@@ -136,6 +147,10 @@ export default class Home extends Vue {
       this.loadVideoCover(this.threeVideo[0]).then((img) => {
         const child = this.$refs.previousVideo.childNodes[0];
         if (child) {
+          if (this.isAndroid) {
+            (child as HTMLVideoElement).src = "";
+            (child as HTMLVideoElement).load();
+          }
           this.$refs.previousVideo.removeChild(child);
         }
         this.$refs.previousVideo.appendChild(img);
@@ -143,6 +158,10 @@ export default class Home extends Vue {
       this.loadVideoCover(this.threeVideo[2]).then((img) => {
         const child = this.$refs.nextVideo.childNodes[0];
         if (child) {
+          if (this.isAndroid) {
+            (child as HTMLVideoElement).src = "";
+            (child as HTMLVideoElement).load();
+          }
           this.$refs.nextVideo.removeChild(child);
         }
         this.$refs.nextVideo.appendChild(img);
@@ -154,26 +173,19 @@ export default class Home extends Vue {
    * 加装视频封面（第一帧）
    */
   loadVideoCover(src: string) {
-    return new Promise<HTMLImageElement>((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       const video = document.createElement("video");
       video.src = src;
       video.setAttribute("crossorigin", "anonymous");
       video.autoplay = true;
+      video.pause();
       video.addEventListener("loadeddata", (e) => {
         const clientWidth = document.documentElement.clientWidth;
         const clientHeight = document.documentElement.clientHeight;
         const clientScale = clientWidth / clientHeight;
         const videoScale = video.videoWidth / video.videoHeight;
 
-        const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas
-          .getContext("2d")
-          ?.drawImage(video, 0, 0, canvas.width, canvas.height);
-
         const img = document.createElement("img");
-        img.src = canvas.toDataURL("image/png");
 
         if (videoScale >= clientScale) {
           // 视频过宽
@@ -181,18 +193,35 @@ export default class Home extends Vue {
           img.style.height = "unset";
           this.$refs.playingVideo.style.width = "100%";
           this.$refs.playingVideo.style.height = "unset";
+          video.style.width = "100%";
+          video.style.height = "unset";
         } else {
           // 视频过高
           img.style.height = "100%";
           img.style.width = "unset";
           this.$refs.playingVideo.style.width = "100%";
           this.$refs.playingVideo.style.height = "unset";
+          video.style.height = "100%";
+          video.style.width = "unset";
         }
 
-        video.src = "";
-        video.load();
+        if (this.isAndroid) {
+          resolve(video);
+        } else {
+          const canvas = document.createElement("canvas");
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          canvas
+            .getContext("2d")
+            ?.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        resolve(img);
+          img.src = canvas.toDataURL("image/png");
+
+          video.src = "";
+          video.load();
+
+          resolve(img);
+        }
       });
     });
   }

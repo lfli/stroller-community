@@ -39,7 +39,7 @@ import Component from "vue-class-component";
 export default class FansList extends Vue {
   isFollow = -1;
 
-  follow(index) {
+  follow(index: any) {
     if (index != this.isFollow) {
       this.isFollow = index;
     } else {

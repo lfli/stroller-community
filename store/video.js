@@ -6,7 +6,7 @@ export const state = () => ({
 
 export const actions = {
     getMvList(context) {
-        return getMvListRequest(40).then(result => {
+        return getMvListRequest(40, 40).then(result => {
             context.commit('getMvList', result.data);
         })
     }
