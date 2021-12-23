@@ -61,38 +61,38 @@ export default class AllMessagesList extends Vue {}
 <style lang="less" scoped>
 .inf-box {
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+  border-radius: 12Px;
+  box-shadow: 0 0 10Px rgba(0, 0, 0, 0.08);
   display: flex;
   justify-content: space-between;
-  padding: 16px 12px;
-  margin-top: 15px;
+  padding: 16Px 12Px;
+  margin-top: 15Px;
 
   .inf-left {
-    width: 50px;
-    height: 50px;
+    width: 50Px;
+    height: 50Px;
     position: relative;
 
     .inf-head {
-      width: 50px;
-      height: 50px;
+      width: 50Px;
+      height: 50Px;
       border-radius: 50%;
     }
 
     .inf-icon {
-      width: 20px;
-      height: 20px;
+      width: 20Px;
+      height: 20Px;
       position: absolute;
-      right: -2px;
-      bottom: -2px;
+      right: -2Px;
+      bottom: -2Px;
     }
   }
 
   .inf-center {
-    width: calc(100% - 170px);
+    width: calc(100% - 170Px);
 
     .inf-name {
-      font-size: 16px;
+      font-size: 16Px;
       font-weight: 500;
       width: 100%;
       display: inline-block;
@@ -104,14 +104,14 @@ export default class AllMessagesList extends Vue {}
     }
 
     .inf-text {
-      font-size: 13px;
-      margin-top: 5px;
+      font-size: 13Px;
+      margin-top: 5Px;
     }
 
     .inf-time {
-      font-size: 12px;
+      font-size: 12Px;
       color: #999;
-      margin-top: 5px;
+      margin-top: 5Px;
     }
   }
 
@@ -123,7 +123,7 @@ export default class AllMessagesList extends Vue {}
     .inf-work {
       width: 100%;
       height: 100%;
-      border-radius: 8px;
+      border-radius: 8Px;
       object-fit: cover;
       position: absolute;
       top: 0;

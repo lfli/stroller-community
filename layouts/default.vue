@@ -9,6 +9,18 @@
           alt=""
         />
       </div>
+      <!-- 
+      <div class="tabs-bg">
+        <div class="tabs-bg-left"></div>
+        <div class="tabs-bg-center"></div>
+        <div class="tabs-bg-right"></div>
+      </div> -->
+
+      <div class="tabs-bg">
+         <img src="@/assets/image/Rectangle.png" alt="" class="tabs-bg-img" />
+        <!--<div class="tabs-bg-block"></div> -->
+      </div>
+
       <div class="list">
         <div class="menu-item" @click="setMenuIndex(0)">
           <img v-if="menuIndex === 0" src="@/assets/image/ic_home.png" alt="" />
@@ -88,38 +100,65 @@ export default class Default extends Vue {
   }
 
   .tabs-menu {
-    background: url(@/assets/image/Rectangle.png) no-repeat;
-    background-size: 100% 10vh;
     width: 100%;
-    height: 10vh;
+    height: 95Px;
     display: flex;
     justify-content: center;
     flex-direction: column;
-    position: absolute;
+    position: fixed;
     bottom: 0;
+    z-index: 99;
+
+    .tabs-bg{
+      // background: url(@/assets/image/Rectangle.png) no-repeat center ;
+      // background-size: cover;
+      height: 100%;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+
+
+      .tabs-bg-img{
+        transform: translateX(-50%);
+        height: 100%;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+
+    }
+
 
     .add-ball {
       background-color: #fedf4c;
-      width: 58px;
-      height: 58px;
+      width: 58Px;
+      height: 58Px;
       border-radius: 50%;
-      transform: translate(-50%, -68%);
+      transform: translate(-50%, -45%);
       margin: 0 auto;
       display: flex;
       justify-content: center;
       align-items: center;
       position: absolute;
       left: 50%;
+      z-index: 2;
 
       img {
-        width: 24px;
-        height: 24px;
+        width: 24Px;
+        height: 24Px;
       }
     }
 
     .list {
       display: flex;
+      margin-top: 10Px;
       justify-content: space-around;
+      position: relative;
+      z-index: 2;
 
       .menu-item {
         display: flex;
@@ -127,12 +166,12 @@ export default class Default extends Vue {
         align-items: center;
 
         img {
-          width: 24px;
-          height: 24px;
+          width: 24Px;
+          height: 24Px;
         }
 
         span {
-          font-size: 12px;
+          font-size: 13Px;
         }
 
         .un-activated {

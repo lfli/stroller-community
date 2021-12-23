@@ -52,27 +52,27 @@ export default class FansList extends Vue {
 <style lang="less" scoped>
 .fans-list {
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+  border-radius: 12Px;
+  box-shadow: 0 0 10Px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
-  margin-top: 15px;
+  padding: 16Px;
+  margin-top: 15Px;
 
   .fans-list-img {
-    width: 40px;
-    height: 40px;
+    width: 40Px;
+    height: 40Px;
     border-radius: 50%;
   }
 
   .fans-list-center {
-    width: calc(100% - 140px);
-    padding-left: 15px;
+    width: calc(100% - 140Px);
+    padding-left: 15Px;
   }
 
   .fans-list-title {
-    font-size: 16px;
+    font-size: 16Px;
     font-weight: 500;
     width: 100%;
     display: inline-block;
@@ -84,18 +84,18 @@ export default class FansList extends Vue {
   }
 
   .fans-list-subtitle {
-    font-size: 13px;
+    font-size: 13Px;
     font-weight: 400;
     color: #999;
-    margin-top: 8px;
-    line-height: 12px;
+    margin-top: 8Px;
+    line-height: 12Px;
   }
 
   .btn-follow {
     background: #000;
-    border-radius: 10px;
-    width: 80px;
-    height: 32px;
+    border-radius: 10Px;
+    width: 80Px;
+    height: 32Px;
     color: #fff;
     border: 0;
   }

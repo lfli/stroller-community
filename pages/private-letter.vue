@@ -86,35 +86,35 @@ export default class PrivateLetter extends Vue {
 <style lang="less" scoped>
 .letter-list {
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+  border-radius: 12Px;
+  box-shadow: 0 0 10Px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
-  padding: 16px 20px;
-  margin-top: 15px;
+  padding: 16Px 20Px;
+  margin-top: 15Px;
 
   .letter-list-img {
-    width: 40px;
-    height: 40px;
+    width: 40Px;
+    height: 40Px;
     border-radius: 50%;
   }
 
   .letter-list-center {
     flex: 1;
-    padding-left: 15px;
+    padding-left: 15Px;
   }
 
   .letter-list-title {
-    font-size: 16px;
+    font-size: 16Px;
     font-weight: 500;
   }
 
   .letter-list-subtitle {
-    font-size: 13px;
+    font-size: 13Px;
     font-weight: 400;
     color: #999;
-    margin-top: 8px;
-    line-height: 12px;
+    margin-top: 8Px;
+    line-height: 12Px;
   }
 
   .letter-list-subtitle-name {

@@ -36,20 +36,20 @@ export default class InfList extends Vue {}
 <style lang="less" scoped>
 .inf-list {
   background: #fff;
-  border-radius: 8px;
-  padding: 20px 15px;
+  border-radius: 8Px;
+  padding: 20Px 15Px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 15px;
+  margin-top: 15Px;
 
   .inf-list-left {
     color: #999;
   }
 
   .arrow {
-    width: 8px;
-    height: 8px;
+    width: 8Px;
+    height: 8Px;
   }
 
   .textColor{

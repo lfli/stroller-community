@@ -28,27 +28,27 @@ export default class SignInput extends Vue {}
 
 <style lang="less" scoped>
 .sign-input {
-  margin-top: 20px;
+  margin-top: 20Px;
 
   .sign-input-title {
-    font-size: 18px;
+    font-size: 18Px;
     color: #000;
   }
 
   .sign-input-box {
     background: #f5f5f5;
-    height: 50px;
-    border-radius: 50px;
-    padding: 0 16px;
+    height: 50Px;
+    border-radius: 50Px;
+    padding: 0 16Px;
     display: flex;
     align-items: center;
-    margin-top: 15px;
+    margin-top: 15Px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     .sign-input-input {
-      font-size: 14px;
+      font-size: 14Px;
       color: #000;
       height: 100%;
       width: 90%;
@@ -57,8 +57,8 @@ export default class SignInput extends Vue {}
     }
 
     .input-delete {
-      width: 18px;
-      height: 18px;
+      width: 18Px;
+      height: 18Px;
       background: rgba(0, 0, 0, 0.3);
       border-radius: 50%;
       position: relative;
@@ -69,12 +69,12 @@ export default class SignInput extends Vue {}
       position: absolute;
       left: 50%;
       top: 50%;
-      margin-top: -5px;
-      margin-left: -0.5px;
-      width: 1px;
-      height: 10px;
+      margin-top: -5Px;
+      margin-left: -0.5Px;
+      width: 1Px;
+      height: 10Px;
       background: #fff;
-      border-radius: 2px;
+      border-radius: 2Px;
       transform: rotate(45deg);
     }
 
@@ -83,12 +83,12 @@ export default class SignInput extends Vue {}
       position: absolute;
       left: 50%;
       top: 50%;
-      margin-top: -5px;
-      margin-left: -0.5px;
-      width: 1px;
-      height: 10px;
+      margin-top: -5Px;
+      margin-left: -0.5Px;
+      width: 1Px;
+      height: 10Px;
       background: #fff;
-      border-radius: 2px;
+      border-radius: 2Px;
       transform: rotate(135deg);
     }
   }
