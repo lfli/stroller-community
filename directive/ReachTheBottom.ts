@@ -8,6 +8,11 @@ export const reachTheBottom = {
                         binding.value.callback();
                     }
                 }
+                if (el.scrollTop > 100) {
+                    binding.value.exceed();
+                } else if (el.scrollTop == 0) {
+                    binding.value.noExceed();
+                }
             },
             true
         );

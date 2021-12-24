@@ -1,12 +1,12 @@
 <template>
   <div class="my">
     <img
+      :style="{ filter: isToTop ? 'blur(2px)' : '' }"
       class="my-background"
       src="http://source.unsplash.com/random/1000x600"
       alt=""
     />
-
-    <div class="content-box">
+    <div class="content-box" :style="{ height: isToTop ? '90%' : '' }">
       <div class="base-info">
         <img
           class="header"
@@ -40,8 +40,22 @@
       <div class="video-box">
         <div class="title-tabs">
           <div class="title-box">
-            <span class="title" @click="change(VideoTab.Works)">Works</span>
-            <span class="title" @click="change(VideoTab.Like)">Like</span>
+            <span
+              :style="{
+                color: currentVideoTab === VideoTab.Works ? 'black' : '#999999',
+              }"
+              class="title"
+              @click="change(VideoTab.Works)"
+              >Works</span
+            >
+            <span
+              :style="{
+                color: currentVideoTab === VideoTab.Like ? 'black' : '#999999',
+              }"
+              class="title"
+              @click="change(VideoTab.Like)"
+              >Like</span
+            >
           </div>
           <div
             :class="[
@@ -131,6 +145,8 @@ enum VideoTab {
   },
 })
 export default class My extends Vue {
+  isToTop = false;
+
   VideoTab = VideoTab;
 
   currentVideoTab = VideoTab.Works;
@@ -150,6 +166,8 @@ export default class My extends Vue {
     callback: () => {
       this.worksLoadMore();
     },
+    exceed: this.exceed,
+    noExceed: this.noExceed,
   };
 
   reachTheBottomLikeHandle = {
@@ -157,7 +175,17 @@ export default class My extends Vue {
     callback: () => {
       this.likeLoadMore();
     },
+    exceed: this.exceed,
+    noExceed: this.noExceed,
   };
+
+  exceed() {
+    this.isToTop = true;
+  }
+
+  noExceed() {
+    this.isToTop = false;
+  }
 
   created() {
     if (process.server) {
@@ -280,6 +308,7 @@ export default class My extends Vue {
     border-radius: 30px 30px 0 0;
     display: flex;
     flex-direction: column;
+    transition: 0.2s height;
 
     .base-info {
       display: flex;
