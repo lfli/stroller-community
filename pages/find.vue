@@ -4,7 +4,7 @@
       {{ $t("links.find") }}
     </div>
     <div class="find-list">
-      <div v-for="item in FindList" :key="item" class="find-list-item">
+      <div v-for="(item, index) in FindList" :key="index" class="find-list-item">
         <img :src="item.srcUrl" alt="" class="find-list-img" />
       </div>
     </div>

@@ -17,5 +17,12 @@
     "language": {
         "en": "English",
         "zh": "中文"
+    },
+    "my": {
+        "works": "Works",
+        "like": "Like",
+        "fabulous": "Fabulous",
+        "follow": "Follow",
+        "fans": "Fans"
     }
 }

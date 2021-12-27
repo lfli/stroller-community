@@ -24,15 +24,15 @@
           <div class="three-box">
             <div class="item">
               <span class="num">11.2w</span>
-              <span class="title">Fabulous</span>
+              <span class="title">{{ $t("my.fabulous") }}</span>
             </div>
             <div class="item">
               <span class="num">657</span>
-              <span class="title">Follow</span>
+              <span class="title">{{ $t("my.follow") }}</span>
             </div>
             <div class="item">
               <span class="num">3634</span>
-              <span class="title">Fans</span>
+              <span class="title">{{ $t("my.fans") }}</span>
             </div>
           </div>
         </div>
@@ -46,7 +46,7 @@
               }"
               class="title"
               @click="change(VideoTab.Works)"
-              >Works</span
+              >{{ $t("my.works") }}</span
             >
             <span
               :style="{
@@ -54,7 +54,7 @@
               }"
               class="title"
               @click="change(VideoTab.Like)"
-              >Like</span
+              >{{ $t("my.like") }}</span
             >
           </div>
           <div

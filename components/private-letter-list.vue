@@ -23,7 +23,7 @@ import Component from "vue-class-component";
       default: true,
     },
     clickBtn: {
-      type: String,
+      type: Function,
     },
   },
 })

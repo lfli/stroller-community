@@ -17,5 +17,12 @@
     "language": {
         "en": "English",
         "zh": "中文"
+    },
+    "my": {
+        "works": "作品",
+        "like": "喜欢",
+        "fabulous": "获赞",
+        "follow": "关注",
+        "fans": "粉丝"
     }
 }

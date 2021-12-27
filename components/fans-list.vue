@@ -11,11 +11,9 @@
         </div>
       </div>
       <button
-        :class="{ isActive: isFollow == index }"
-        class="btn-follow"
-        @click="follow(index)"
+        class="btn-follow isActive"
       >
-        <span v-if="isFollow == -1">+ {{ $t("links.follow") }}</span>
+        <span v-if="isFollow">+ {{ $t("links.follow") }}</span>
         <span v-else>{{ $t("links.followed") }}</span>
       </button>
     </div>
@@ -37,15 +35,7 @@ import Component from "vue-class-component";
   },
 })
 export default class FansList extends Vue {
-  isFollow = -1;
-
-  follow(index: any) {
-    if (index != this.isFollow) {
-      this.isFollow = index;
-    } else {
-      this.isFollow = -1;
-    }
-  }
+  isFollow = 1;
 }
 </script>
 
