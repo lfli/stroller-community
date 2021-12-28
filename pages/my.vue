@@ -14,7 +14,7 @@
           alt=""
         />
         <div class="info">
-          <div class="top">
+          <div class="top" @click="goSetting()">
             <div class="left">
               <span class="name">Joe Goodman</span>
               <span class="email">nevomuw@asa.an</span>
@@ -284,6 +284,10 @@ export default class My extends Vue {
       this.loadLikeImgList();
       this.reachTheBottomLikeHandle.isShowTrigger = true;
     }, 200);
+  }
+
+  goSetting() {
+    this.$router.push({path: 'my-setting'});
   }
 }
 </script>
