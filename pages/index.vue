@@ -128,7 +128,7 @@ export default class Home extends Vue {
     this.$refs.playingVideo.play();
   }
 
-  async mounted() { 
+  async mounted() {
     this.isAndroid =
       navigator.userAgent
         .toLowerCase()
@@ -186,18 +186,32 @@ export default class Home extends Vue {
       this.$refs.currentVideo.style.transform = "";
     });
 
-    await Promise.all([
-      this.loadVideoCover(this.threeVideo[0]).then((img) => {
-        const child = this.$refs.previousVideo.childNodes[0];
-        if (child) {
-          if (this.isAndroid) {
-            (child as HTMLVideoElement).src = "";
-            (child as HTMLVideoElement).load();
-          }
-          this.$refs.previousVideo.removeChild(child);
+    if (this.playingVideoIndex === 1) {
+      const child = this.$refs.previousVideo.childNodes[0];
+      if (child) {
+        if (this.isAndroid) {
+          (child as HTMLVideoElement).src = "";
+          (child as HTMLVideoElement).load();
         }
-        this.$refs.previousVideo.appendChild(img);
-      }),
+        this.$refs.previousVideo.removeChild(child);
+      }
+    } else {
+      await Promise.all([
+        this.loadVideoCover(this.threeVideo[0]).then((img) => {
+          const child = this.$refs.previousVideo.childNodes[0];
+          if (child) {
+            if (this.isAndroid) {
+              (child as HTMLVideoElement).src = "";
+              (child as HTMLVideoElement).load();
+            }
+            this.$refs.previousVideo.removeChild(child);
+          }
+          this.$refs.previousVideo.appendChild(img);
+        }),
+      ]);
+    }
+
+    await Promise.all([
       this.loadVideoCover(this.threeVideo[2]).then((img) => {
         const child = this.$refs.nextVideo.childNodes[0];
         if (child) {
@@ -287,7 +301,7 @@ export default class Home extends Vue {
     if (moveScale < -0.2) {
       // 播放下一个视频
       this.playNextVideo();
-    } else if (moveScale > 0.2) {
+    } else if (moveScale > 0.2 && this.playingVideoIndex >= 2) {
       // 播放上一个视频
       this.playPreviousVideo();
     } else {
