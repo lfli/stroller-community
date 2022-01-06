@@ -8,6 +8,20 @@
 
     <div class="handle">
       <img
+        class="mute"
+        v-if="isMute"
+        src="@/assets/image/icon_mute.png"
+        alt=""
+        @click="setNoMute()"
+      />
+      <img
+        class="mute"
+        v-else
+        src="@/assets/image/icon_paly.png"
+        alt=""
+        @click="setMute()"
+      />
+      <img
         @click="jump('search')"
         class="search"
         src="@/assets/image/search.png"
@@ -16,11 +30,10 @@
       <div class="handle-right">
         <UserHeaderFollow />
         <Good :title="'立刻决定是否了'" />
-        <Share />
+        <Share @share="share()" />
       </div>
 
       <div class="info">
-        <button @click="play()">开启声音</button>
         <div class="title">滑板进阶技巧</div>
         <div class="author">@Emilie Palmer</div>
       </div>
@@ -37,6 +50,7 @@
         @touchstart="touchstart"
         @touchend="touchend"
         @touchmove="touchmove"
+        @click="change()"
       >
         <video
           class="playing-video"
@@ -69,6 +83,9 @@ import { getMvUrlRequest } from "~/apis/requests/api";
     userName() {
       return this.$store.state.auth.userName;
     },
+    isMute() {
+      return this.$store.state.video.isMute;
+    },
   },
 })
 export default class Home extends Vue {
@@ -91,32 +108,58 @@ export default class Home extends Vue {
 
   isRestoreLocation = false;
 
+  offset = 0; // 当前已有视频数量
+
   async asyncData() {
     return { title: "你你你你将来肯定就发给" };
   }
 
-  play() {
+  setNoMute() {
     this.$refs.playingVideo.muted = false;
+    this.$store.dispatch("video/noMute");
   }
 
-  async mounted() {
+  setMute() {
+    this.$refs.playingVideo.muted = true;
+    this.$store.dispatch("video/mute");
+  }
+
+  activated() {
+    this.$refs.playingVideo.play();
+  }
+
+  async mounted() { 
     this.isAndroid =
       navigator.userAgent
         .toLowerCase()
         .match(/android/i)
         ?.toString() == "android";
 
-    await this.$store.dispatch("video/getMvList");
+    await this.$store.dispatch("video/getMvList", {
+      limit: 3,
+      offset: this.offset,
+    });
+    this.offset = 3;
+    await this.loadVideoList();
 
+    this.playingVideoIndex = 1;
+    this.rendererVideoBox();
+
+    await this.$store.dispatch("video/getMvList", {
+      limit: 20,
+      offset: this.offset,
+    });
+    this.offset += 20;
+    await this.loadVideoList();
+  }
+
+  async loadVideoList() {
     const mvUrlPromiseList = (this.$store.state.video.videoList as []).map(
       (item: any) => getMvUrlRequest(item.id)
     );
     this.videoList = await Promise.all(mvUrlPromiseList).then((result) =>
       result.map((item) => item.data.url)
     );
-
-    this.playingVideoIndex = 20;
-    this.rendererVideoBox();
   }
 
   async rendererVideoBox() {
@@ -302,11 +345,34 @@ export default class Home extends Vue {
     }, 300);
   }
 
-  resetVideoBox(who: "next" | "previous") {
+  async resetVideoBox(who: "next" | "previous") {
     this.playingVideoIndex += who === "next" ? 1 : -1;
+    if (this.playingVideoIndex === 0) {
+      this.playingVideoIndex = 1;
+    }
+
     this.rendererVideoBox().then(() => {
       this.clearStyle();
     });
+
+    if (this.playingVideoIndex + 5 > this.videoList.length) {
+      await this.$store.dispatch("video/getMvList", {
+        limit: 20,
+        offset: this.offset,
+      });
+      this.offset += 20;
+      await this.loadVideoList();
+    }
+  }
+
+  share() {}
+
+  change() {
+    if (this.$refs.playingVideo.paused) {
+      this.$refs.playingVideo.play();
+    } else {
+      this.$refs.playingVideo.pause();
+    }
   }
 }
 </script>
@@ -318,6 +384,14 @@ export default class Home extends Vue {
   background-color: black;
 
   .handle {
+    .mute {
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      top: 16px;
+      right: 46px;
+    }
+
     .search {
       width: 24px;
       height: 24px;

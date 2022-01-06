@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="$emit('share')">
     <img src="@/assets/image/icon_share.png" alt="" />
     <span>1236</span>
   </div>

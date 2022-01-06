@@ -1,6 +1,6 @@
 <template>
   <div class="default">
-    <Nuxt class="content" />
+    <Nuxt keep-alive class="content" />
     <div class="tabs-menu">
       <div class="add-ball">
         <img
