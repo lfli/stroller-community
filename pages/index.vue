@@ -5,9 +5,39 @@
         {{ $t(`language.${lang}`) }}
       </option>
     </select> -->
+    <div class="leaflet" ref="leaflet">
+      <img
+        class="leaflet-release"
+        src="@/assets/image/icon_release@2x.png"
+        alt=""
+      />
+      <s-facebook
+        :window-features="windowFeatures"
+        :share-options="shareOptions"
+      >
+        <img
+          class="leaflet-share"
+          src="@/assets/image/icon_share@2x.png"
+          alt=""
+        />
+      </s-facebook>
+
+      <span class="tip" @click="start()">点击查看</span>
+    </div>
 
     <div class="handle">
       <img
+        class="leaflet-release"
+        src="@/assets/image/icon_release@2x.png"
+        alt=""
+      />
+      <img
+        class="leaflet-share"
+        src="@/assets/image/icon_share@2x.png"
+        alt=""
+      />
+
+      <!-- <img
         class="mute"
         v-if="isMute"
         src="@/assets/image/icon_mute.png"
@@ -36,7 +66,7 @@
       <div class="info">
         <div class="title">滑板进阶技巧</div>
         <div class="author">@Emilie Palmer</div>
-      </div>
+      </div> -->
     </div>
 
     <div class="video-box">
@@ -77,8 +107,12 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { getMvUrlRequest } from "~/apis/requests/api";
+import { SFacebook, SFacebookCount } from "vue-socials";
+// import { touch } from "@/directive/Touch";
 
 @Component({
+  layout: "notabs",
+  components: { SFacebook, SFacebookCount },
   computed: {
     userName() {
       return this.$store.state.auth.userName;
@@ -87,14 +121,25 @@ import { getMvUrlRequest } from "~/apis/requests/api";
       return this.$store.state.video.isMute;
     },
   },
+  // directives: {
+  //   touch,
+  // },
 })
 export default class Home extends Vue {
+  windowFeatures = {};
+  shareOptions = {
+    url: "https://github.com/",
+    quote: "童车社群",
+    hashtag: "#five童车社群",
+  };
+
   $videojs!: any;
   $refs!: {
     previousVideo: HTMLElement;
     currentVideo: HTMLElement;
     nextVideo: HTMLElement;
     playingVideo: HTMLVideoElement;
+    leaflet: HTMLElement;
   };
   isAndroid!: boolean;
 
@@ -109,6 +154,14 @@ export default class Home extends Vue {
   isRestoreLocation = false;
 
   offset = 0; // 当前已有视频数量
+
+  isFirst = true; // 是否第一次进入界面
+
+  start() {
+    this.$refs.leaflet.style.transform = `translateY(-100%)`;
+    this.$refs.playingVideo.play();
+    this.setNoMute();
+  }
 
   async asyncData() {
     return { title: "你你你你将来肯定就发给" };
@@ -125,7 +178,10 @@ export default class Home extends Vue {
   }
 
   activated() {
-    this.$refs.playingVideo.play();
+    if (!this.isFirst) {
+      this.$refs.playingVideo.play();
+    }
+    this.isFirst = false;
   }
 
   async mounted() {
@@ -143,7 +199,7 @@ export default class Home extends Vue {
     await this.loadVideoList();
 
     this.playingVideoIndex = 1;
-    this.rendererVideoBox();
+    this.rendererVideoBox(true);
 
     await this.$store.dispatch("video/getMvList", {
       limit: 20,
@@ -162,7 +218,7 @@ export default class Home extends Vue {
     );
   }
 
-  async rendererVideoBox() {
+  async rendererVideoBox(isFirstRenderer?: boolean) {
     this.threeVideo = this.videoList.slice(
       this.playingVideoIndex - 1,
       this.playingVideoIndex + 2
@@ -181,6 +237,11 @@ export default class Home extends Vue {
 
       this.$refs.playingVideo.src = this.threeVideo[1];
       this.$refs.playingVideo.load();
+
+      if (isFirstRenderer) {
+        // 刚进入网站时暂停播放
+        this.$refs.playingVideo.pause();
+      }
 
       // 当前要播放的视频加载完成时，将 currentVideo 移动到原本位置（屏幕中间），防止闪屏
       this.$refs.currentVideo.style.transform = "";
@@ -397,7 +458,60 @@ export default class Home extends Vue {
   width: 100%;
   background-color: black;
 
+  .leaflet {
+    position: absolute;
+    top: 0;
+    background-color: pink;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    transition: transform .5s;
+
+    .tip {
+      position: absolute;
+      bottom: 100Px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 20px;
+      font-family: AlibabaPuHuiTiM;
+      color: #FFFFFF;
+    }
+
+    .leaflet-release {
+      width: 24Px;
+      height: 24Px;
+      position: absolute;
+      right: 71Px;
+      top: 24Px;
+    }
+
+    .leaflet-share {
+      width: 24Px;
+      height: 24Px;
+      position: absolute;
+      right: 24Px;
+      top: 24Px;
+    }
+  }
+
   .handle {
+
+    .leaflet-release {
+      width: 24Px;
+      height: 24Px;
+      position: absolute;
+      right: 71Px;
+      top: 24Px;
+    }
+
+    .leaflet-share {
+      width: 24Px;
+      height: 24Px;
+      position: absolute;
+      right: 24Px;
+      top: 24Px;
+    }
+
     .mute {
       width: 24px;
       height: 24px;

@@ -32,6 +32,7 @@ export default {
     '@/plugins/i18n.js',
     { src: '@/plugins/rem.js', ssr: false },
     { src: '@/plugins/video.js', ssr: false },
+    { src: '@/plugins/vue-socials.js', ssr: false}
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
