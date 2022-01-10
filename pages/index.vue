@@ -22,20 +22,40 @@
         />
       </s-facebook>
 
-      <span class="tip" @click="start()">点击查看</span>
+      <img src="@/assets/image/click.gif" alt="" class="tip" @click="start()" />
     </div>
 
     <div class="handle">
-      <img
-        class="leaflet-release"
-        src="@/assets/image/icon_release@2x.png"
-        alt=""
-      />
-      <img
+      <Bubble class="bubble-release">
+        <img
+          class="leaflet-release"
+          src="@/assets/image/icon_release@2x.png"
+          alt=""
+        />
+
+        <template v-slot:content>
+          <div class="sub-tip-box">
+            <p>Submission mailbox:</p>
+            <p style="color: #fedf4c">
+              &#8249;<a style="color: #fedf4c">ake_yao@sandinrayli.com</a
+              >&#8250;
+            </p>
+            <p>A generous gift will be given if the submission is adopted.</p>
+            <p>Welcome to contribute !</p>
+          </div>
+        </template>
+      </Bubble>
+      <s-facebook
         class="leaflet-share"
-        src="@/assets/image/icon_share@2x.png"
-        alt=""
-      />
+        :window-features="windowFeatures"
+        :share-options="shareOptions"
+      >
+        <img
+          style="width: 24px; height: 24px"
+          src="@/assets/image/icon_share@2x.png"
+          alt=""
+        />
+      </s-facebook>
 
       <!-- <img
         class="mute"
@@ -472,7 +492,8 @@ export default class Home extends Vue {
       bottom: 100Px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 20px;
+      width: 30Px;
+      height: 34Px;
       font-family: AlibabaPuHuiTiM;
       color: #FFFFFF;
     }
@@ -496,12 +517,24 @@ export default class Home extends Vue {
 
   .handle {
 
-    .leaflet-release {
-      width: 24Px;
-      height: 24Px;
+    .bubble-release {
       position: absolute;
       right: 71Px;
       top: 24Px;
+
+      .leaflet-release {
+        width: 24Px;
+        height: 24Px;
+      }
+
+      .sub-tip-box {
+        width: 250Px;
+        padding: 13Px;
+
+        p {
+          line-height: 24Px;
+        }
+      }
     }
 
     .leaflet-share {
