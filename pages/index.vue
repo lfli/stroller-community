@@ -492,8 +492,8 @@ export default class Home extends Vue {
       bottom: 100Px;
       left: 50%;
       transform: translateX(-50%);
-      width: 30Px;
-      height: 34Px;
+      width: 30px;
+      height: 34px;
       font-family: AlibabaPuHuiTiM;
       color: #FFFFFF;
     }
