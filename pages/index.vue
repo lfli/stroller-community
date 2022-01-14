@@ -7,10 +7,33 @@
     </select> -->
     <div class="leaflet" ref="leaflet">
       <img
-        class="leaflet-release"
-        src="@/assets/image/icon_release@2x.png"
+        class="shouye-png"
+        src="@/assets/image/shouye.png"
+        srcset="
+          @/assets/image/shouye@2x.png 2x,
+          @/assets/image/shouye@3x.png 3x
+        "
         alt=""
       />
+      <Bubble class="bubble-release">
+        <img
+          class="leaflet-release"
+          src="@/assets/image/icon_release@2x.png"
+          alt=""
+        />
+
+        <template v-slot:content>
+          <div class="sub-tip-box">
+            <p>Submission mailbox:</p>
+            <p style="color: #fedf4c">
+              &#8249;<a style="color: #fedf4c">ake_yao@sandinrayli.com</a
+              >&#8250;
+            </p>
+            <p>A generous gift will be given if the submission is adopted.</p>
+            <p>Welcome to contribute !</p>
+          </div>
+        </template>
+      </Bubble>
       <s-facebook
         :window-features="windowFeatures"
         :share-options="shareOptions"
@@ -22,7 +45,14 @@
         />
       </s-facebook>
 
-      <img src="@/assets/image/click.gif" alt="" class="tip" @click="start()" />
+      <div class="click-gif-box">
+        <img
+          src="@/assets/image/click.png"
+          alt=""
+          class="tip"
+          @click="start()"
+        />
+      </div>
     </div>
 
     <div class="handle">
@@ -167,7 +197,16 @@ export default class Home extends Vue {
 
   threeVideo: string[] = []; // 正在播放以及前后的 3 个视频地址
 
-  videoList: string[] = []; // 视频地址列表
+  videoList: string[] = [
+    "/video1.mp4",
+    "/video2.mp4",
+    "/video3.mp4",
+    "/video4.mp4",
+    "/video1.mp4",
+    "/video2.mp4",
+    "/video3.mp4",
+    "/video4.mp4",
+  ]; // 视频地址列表
 
   playingVideoIndex!: number; // 当前播放视频指针
 
@@ -211,22 +250,22 @@ export default class Home extends Vue {
         .match(/android/i)
         ?.toString() == "android";
 
-    await this.$store.dispatch("video/getMvList", {
-      limit: 3,
-      offset: this.offset,
-    });
-    this.offset = 3;
-    await this.loadVideoList();
+    // await this.$store.dispatch("video/getMvList", {
+    //   limit: 3,
+    //   offset: this.offset,
+    // });
+    // this.offset = 3;
+    // await this.loadVideoList();
 
     this.playingVideoIndex = 1;
     this.rendererVideoBox(true);
 
-    await this.$store.dispatch("video/getMvList", {
-      limit: 20,
-      offset: this.offset,
-    });
-    this.offset += 20;
-    await this.loadVideoList();
+    // await this.$store.dispatch("video/getMvList", {
+    //   limit: 20,
+    //   offset: this.offset,
+    // });
+    // this.offset += 20;
+    // await this.loadVideoList();
   }
 
   async loadVideoList() {
@@ -337,8 +376,8 @@ export default class Home extends Vue {
           // 视频过高
           img.style.height = "100%";
           img.style.width = "unset";
-          this.$refs.playingVideo.style.width = "100%";
-          this.$refs.playingVideo.style.height = "unset";
+          this.$refs.playingVideo.style.width = "unset";
+          this.$refs.playingVideo.style.height = "100%";
           video.style.height = "100%";
           video.style.width = "unset";
         }
@@ -379,10 +418,10 @@ export default class Home extends Vue {
     const moveScale =
       (touchendY - this.touchstartY) / document.documentElement.clientHeight;
 
-    if (moveScale < -0.2) {
+    if (moveScale < -0.1) {
       // 播放下一个视频
       this.playNextVideo();
-    } else if (moveScale > 0.2 && this.playingVideoIndex >= 2) {
+    } else if (moveScale > 0.1 && this.playingVideoIndex >= 2) {
       // 播放上一个视频
       this.playPreviousVideo();
     } else {
@@ -450,13 +489,26 @@ export default class Home extends Vue {
       this.clearStyle();
     });
 
+    // if (this.playingVideoIndex + 5 > this.videoList.length) {
+    //   await this.$store.dispatch("video/getMvList", {
+    //     limit: 20,
+    //     offset: this.offset,
+    //   });
+    //   this.offset += 20;
+    //   await this.loadVideoList();
+    // }
+
     if (this.playingVideoIndex + 5 > this.videoList.length) {
-      await this.$store.dispatch("video/getMvList", {
-        limit: 20,
-        offset: this.offset,
-      });
-      this.offset += 20;
-      await this.loadVideoList();
+      this.videoList.push(
+        "/video1.mp4",
+        "/video2.mp4",
+        "/video3.mp4",
+        "/video4.mp4",
+        "/video1.mp4",
+        "/video2.mp4",
+        "/video3.mp4",
+        "/video4.mp4"
+      );
     }
   }
 
@@ -481,29 +533,62 @@ export default class Home extends Vue {
   .leaflet {
     position: absolute;
     top: 0;
-    background-color: pink;
     width: 100%;
     height: 100%;
     z-index: 999;
     transition: transform .5s;
+    overflow: hidden;
+
+    .bubble-release {
+      position: absolute;
+      right: 71Px;
+      top: 24Px;
+
+      .leaflet-release {
+        width: 24Px;
+        height: 24Px;
+      }
+
+      .sub-tip-box {
+        width: 250Px;
+        padding: 13Px;
+
+        p {
+          line-height: 24Px;
+        }
+      }
+    }
+
+    .shouye-png {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+
+    @keyframes tobig {
+      from {
+        transform: scale(1);
+      }
+      to {
+        transform: scale(1.2);
+      }
+    }
 
     .tip {
       position: absolute;
-      bottom: 100Px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 30px;
-      height: 34px;
+      width: 202Px;
+      height: 60Px;
       font-family: AlibabaPuHuiTiM;
       color: #FFFFFF;
+      animation: tobig 1s;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
     }
 
     .leaflet-release {
       width: 24Px;
       height: 24Px;
-      position: absolute;
-      right: 71Px;
-      top: 24Px;
     }
 
     .leaflet-share {
@@ -512,6 +597,17 @@ export default class Home extends Vue {
       position: absolute;
       right: 24Px;
       top: 24Px;
+    }
+
+    .click-gif-box {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 30%;
+      background-image: linear-gradient(0, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0));
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 
